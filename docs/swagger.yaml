@@ -1,0 +1,388 @@
+basePath: /api
+definitions:
+  models.HeroeModel:
+    properties:
+      ataqueBase:
+        type: integer
+      ataqueRnd:
+        type: integer
+      clase:
+        enum:
+        - Guerrero
+        - Mago
+        - Pícaro
+        type: string
+      daño:
+        type: integer
+      defensa:
+        type: integer
+      descripcion:
+        type: string
+      descuento:
+        minimum: 0
+        type: integer
+      estado:
+        type: boolean
+      icono:
+        type: string
+      id:
+        type: string
+      imagen:
+        type: string
+      nombre:
+        type: string
+      poder:
+        type: integer
+      precio:
+        minimum: 0
+        type: integer
+      stock:
+        minimum: 0
+        type: integer
+      tipo:
+        enum:
+        - Heroes
+        - Armas
+        - Armaduras
+        - Items
+        - Épicas
+        type: string
+      vida:
+        type: integer
+    required:
+    - ataqueBase
+    - ataqueRnd
+    - clase
+    - daño
+    - defensa
+    - descripcion
+    - descuento
+    - estado
+    - icono
+    - imagen
+    - nombre
+    - poder
+    - precio
+    - stock
+    - tipo
+    - tipo
+    - vida
+    type: object
+externalDocs:
+  description: Repository
+  url: https://github.com/JDKdevStudio/TheNexusBattlesII_Card_API_Reborn
+host: localhost
+info:
+  contact: {}
+  description: Servicio API para acceder a las cartas del negocio
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit/
+  termsOfService: http://swagger.io/terms/
+  title: 'The Nexus Battles II: Card API Service Reborn'
+  version: "2.0"
+paths:
+  /heroes/:
+    get:
+      description: este método devuelve una lista de documentos tipo Heroe
+      parameters:
+      - description: Tamaño de la paginación
+        in: query
+        name: size
+        required: true
+        type: integer
+      - description: Página de los documentos
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Si se activa el filtro, solo trae las cartas activas
+        in: query
+        name: statusFilter
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lista de documentos tipo Heroe
+          schema:
+            items:
+              $ref: '#/definitions/models.HeroeModel'
+            type: array
+        "400":
+          description: Parámetros de paginación inválidos
+          schema:
+            type: string
+        "500":
+          description: Error interno en el servidor
+          schema:
+            type: string
+      summary: trae una lista de documentos tipo Heroe
+      tags:
+      - Heroes
+    patch:
+      consumes:
+      - multipart/form-data
+      description: este método recibe los parámetros de tipo Heroe y actualiza la
+        carta
+      parameters:
+      - description: Id de la carta
+        in: formData
+        name: id
+        required: true
+        type: string
+      - description: Imagen de la carta
+        in: formData
+        name: imagen
+        type: file
+      - description: Icono de la carta
+        in: formData
+        name: icono
+        type: string
+      - description: Nombre de la carta
+        in: formData
+        name: nombre
+        type: string
+      - description: Poder de la carta
+        in: formData
+        name: poder
+        type: integer
+      - description: Vida de la carta
+        in: formData
+        name: vida
+        type: integer
+      - description: defensa de la carta
+        in: formData
+        name: defensa
+        type: integer
+      - description: Ataque base de la carta
+        in: formData
+        name: ataqueBase
+        type: integer
+      - description: Ataque aleatorio de la carta
+        in: formData
+        name: ataqueRnd
+        type: integer
+      - description: Daño de la carta
+        in: formData
+        name: daño
+        type: integer
+      - description: Descripción de la carta
+        in: formData
+        name: descripcion
+        type: string
+      - description: '[Ecommerce] Precio de la carta'
+        in: formData
+        name: precio
+        type: integer
+      - description: '[Ecommerce] Descuento de la carta'
+        in: formData
+        name: descuento
+        type: integer
+      - description: '[Ecommerce] Stock de la carta'
+        in: formData
+        name: stock
+        type: integer
+      - description: Activar o desactivar la carta
+        in: formData
+        name: estado
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Documento actualizado exitosamente
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Parámetros de paginación inválidos
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Error interno en el servidor
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: actualiza un documento tipo Heroe
+      tags:
+      - Heroes
+    post:
+      consumes:
+      - multipart/form-data
+      description: este método recibe los parámetros de tipo Heroe y crea la carta
+      parameters:
+      - description: Imagen de la carta
+        in: formData
+        name: imagen
+        required: true
+        type: file
+      - description: Icono de la carta
+        in: formData
+        name: icono
+        required: true
+        type: string
+      - description: Nombre de la carta
+        in: formData
+        name: nombre
+        required: true
+        type: string
+      - description: Clase de la carta
+        in: formData
+        name: clase
+        required: true
+        type: string
+      - description: Tipo de la carta
+        in: formData
+        name: tipo
+        required: true
+        type: string
+      - description: Poder de la carta
+        in: formData
+        name: poder
+        required: true
+        type: integer
+      - description: Vida de la carta
+        in: formData
+        name: vida
+        required: true
+        type: integer
+      - description: defensa de la carta
+        in: formData
+        name: defensa
+        required: true
+        type: integer
+      - description: Ataque base de la carta
+        in: formData
+        name: ataqueBase
+        required: true
+        type: integer
+      - description: Ataque aleatorio de la carta
+        in: formData
+        name: ataqueRnd
+        required: true
+        type: integer
+      - description: Daño de la carta
+        in: formData
+        name: daño
+        required: true
+        type: integer
+      - description: Descripción de la carta
+        in: formData
+        name: descripcion
+        required: true
+        type: string
+      - description: '[Ecommerce] Precio de la carta'
+        in: formData
+        name: precio
+        required: true
+        type: integer
+      - description: '[Ecommerce] Descuento de la carta'
+        in: formData
+        name: descuento
+        required: true
+        type: integer
+      - description: '[Ecommerce] Stock de la carta'
+        in: formData
+        name: stock
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Documento creado exitosamente
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Parámetros de paginación inválidos
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Error interno en el servidor
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: crea un documento tipo Heroe
+      tags:
+      - Heroes
+  /heroes/{id}:
+    get:
+      description: este método devuelve un documento tipo Heroe por búsqueda de id
+      parameters:
+      - description: ID del heroe
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Documento tipo Heroe
+          schema:
+            $ref: '#/definitions/models.HeroeModel'
+        "400":
+          description: Id de búsqueda inválido
+          schema:
+            type: string
+        "404":
+          description: Documento no existente en la base de datos
+          schema:
+            type: string
+      summary: trae un documento tipo Heroe
+      tags:
+      - Heroes
+  /heroes/name/:
+    get:
+      consumes:
+      - application/json
+      description: este método devuelve una lista de documentos tipo Heroe filtrado
+        por nombre
+      parameters:
+      - description: Tamaño de la paginación
+        in: query
+        name: size
+        required: true
+        type: integer
+      - description: Página de los documentos
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: palabra clave para filtrar
+        in: query
+        name: keyword
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lista de documentos tipo Heroe
+          schema:
+            items:
+              $ref: '#/definitions/models.HeroeModel'
+            type: array
+        "400":
+          description: Parámetros de paginación inválidos
+          schema:
+            type: string
+        "500":
+          description: Error interno en el servidor
+          schema:
+            type: string
+      summary: trae una lista de documentos tipo Heroe filtrado por nombre
+      tags:
+      - Heroes
+swagger: "2.0"
