@@ -1,5 +1,72 @@
 basePath: /api
 definitions:
+  models.ConsumibleModel:
+    properties:
+      clase:
+        enum:
+        - Guerrero
+        - Mago
+        - Pícaro
+        type: string
+      coleccion:
+        enum:
+        - Heroes
+        - Armas
+        - Armaduras
+        - Items
+        - Épicas
+        type: string
+      descripcion:
+        type: string
+      descuento:
+        minimum: 0
+        type: integer
+      efecto:
+        additionalProperties: true
+        type: object
+      efectoHeroe:
+        additionalProperties: true
+        type: object
+      estado:
+        type: boolean
+      icono:
+        type: string
+      id:
+        type: string
+      imagen:
+        type: string
+      nombre:
+        type: string
+      precio:
+        minimum: 0
+        type: integer
+      stock:
+        minimum: 0
+        type: integer
+      tipo:
+        enum:
+        - Tanque
+        - Armas
+        - Fuego
+        - Hielo
+        - Veneno
+        - Machete
+        type: string
+    required:
+    - clase
+    - coleccion
+    - descripcion
+    - descuento
+    - efecto
+    - efectoHeroe
+    - estado
+    - icono
+    - imagen
+    - nombre
+    - precio
+    - stock
+    - tipo
+    type: object
   models.HeroeModel:
     properties:
       ataqueBase:
@@ -11,6 +78,14 @@ definitions:
         - Guerrero
         - Mago
         - Pícaro
+        type: string
+      coleccion:
+        enum:
+        - Heroes
+        - Armas
+        - Armaduras
+        - Items
+        - Épicas
         type: string
       daño:
         type: integer
@@ -41,11 +116,12 @@ definitions:
         type: integer
       tipo:
         enum:
-        - Heroes
+        - Tanque
         - Armas
-        - Armaduras
-        - Items
-        - Épicas
+        - Fuego
+        - Hielo
+        - Veneno
+        - Machete
         type: string
       vida:
         type: integer
@@ -53,6 +129,7 @@ definitions:
     - ataqueBase
     - ataqueRnd
     - clase
+    - coleccion
     - daño
     - defensa
     - descripcion
@@ -64,7 +141,6 @@ definitions:
     - poder
     - precio
     - stock
-    - tipo
     - tipo
     - vida
     type: object
@@ -82,6 +158,124 @@ info:
   title: 'The Nexus Battles II: Card API Service Reborn'
   version: "2.0"
 paths:
+  /cartas/getid/{id}:
+    get:
+      description: este método devuelve un documento tipo Carta por búsqueda de id
+      parameters:
+      - description: ID de la Carta
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Documento tipo Carta
+          schema:
+            type: object
+        "400":
+          description: Id de búsqueda inválido
+          schema:
+            type: string
+        "404":
+          description: Documento no existente en la base de datos
+          schema:
+            type: string
+      summary: trae un documento tipo Carta
+      tags:
+      - Cartas
+  /consumible/:
+    get:
+      description: este método devuelve una lista de documentos tipo Consumible
+      parameters:
+      - description: Tamaño de la paginación
+        in: query
+        name: size
+        required: true
+        type: integer
+      - description: Página de los documentos
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Coleccion del documento
+        in: query
+        name: coleccion
+        required: true
+        type: string
+      - description: Si se activa el filtro, solo trae las cartas activas
+        in: query
+        name: statusFilter
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lista de documentos tipo Consumible
+          schema:
+            items:
+              $ref: '#/definitions/models.ConsumibleModel'
+            type: array
+        "400":
+          description: Parámetros de paginación inválidos
+          schema:
+            type: string
+        "500":
+          description: Error interno en el servidor
+          schema:
+            type: string
+      summary: trae una lista de documentos tipo Consumible
+      tags:
+      - Consumible
+  /consumible/name/:
+    get:
+      consumes:
+      - application/json
+      description: este método devuelve una lista de documentos tipo Consumible filtrado
+        por nombre
+      parameters:
+      - description: Tamaño de la paginación
+        in: query
+        name: size
+        required: true
+        type: integer
+      - description: Página de los documentos
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: palabra clave para filtrar
+        in: query
+        name: keyword
+        required: true
+        type: string
+      - description: Coleccion del documento
+        in: query
+        name: coleccion
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lista de documentos tipo Consumible
+          schema:
+            items:
+              $ref: '#/definitions/models.ConsumibleModel'
+            type: array
+        "400":
+          description: Parámetros de paginación inválidos
+          schema:
+            type: string
+        "500":
+          description: Error interno en el servidor
+          schema:
+            type: string
+      summary: trae una lista de documentos tipo Consumible filtrado por nombre
+      tags:
+      - Consumible
   /heroes/:
     get:
       description: este método devuelve una lista de documentos tipo Heroe
@@ -314,33 +508,6 @@ paths:
               type: string
             type: object
       summary: crea un documento tipo Heroe
-      tags:
-      - Heroes
-  /heroes/{id}:
-    get:
-      description: este método devuelve un documento tipo Heroe por búsqueda de id
-      parameters:
-      - description: ID del heroe
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Documento tipo Heroe
-          schema:
-            $ref: '#/definitions/models.HeroeModel'
-        "400":
-          description: Id de búsqueda inválido
-          schema:
-            type: string
-        "404":
-          description: Documento no existente en la base de datos
-          schema:
-            type: string
-      summary: trae un documento tipo Heroe
       tags:
       - Heroes
   /heroes/name/:

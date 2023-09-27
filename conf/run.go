@@ -17,11 +17,7 @@ import (
 func Run(server *echo.Echo) {
 	if sslCert, _ := strconv.ParseBool(os.Getenv("SSLCERT")); sslCert {
 		server.AutoTLSManager.Cache = autocert.DirCache("/var/www/.cache")
-		httpRedirect := echo.New()
-		httpRedirect.Pre(middleware.HTTPSRedirect())
-		if err := httpRedirect.Start(":80"); err != nil {
-			log.Fatal(err)
-		}
+		go httpRedirect()
 		if err := server.StartAutoTLS(":443"); err != nil {
 			log.Fatal(err)
 		}
@@ -29,5 +25,13 @@ func Run(server *echo.Echo) {
 		if err := server.Start(":80"); err != nil {
 			log.Fatal(err)
 		}
+	}
+}
+
+func httpRedirect() {
+	httpRedirect := echo.New()
+	httpRedirect.Pre(middleware.HTTPSRedirect())
+	if err := httpRedirect.Start(":80"); err != nil {
+		log.Fatal(err)
 	}
 }

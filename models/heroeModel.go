@@ -47,25 +47,17 @@ func (h *HeroeModel) Validate(validateNotNulls bool) error {
 	return nil
 }
 
-func (h *HeroeModel) GetObject(heroe_id primitive.ObjectID) error {
-	db := database.GetMongoClient()
-	col := db.Database(os.Getenv("MONGO_DB")).Collection("cartas")
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
-	defer cancel()
-	return col.FindOne(ctx, bson.M{"_id": heroe_id, "estado": true}).Decode(&h)
-}
-
 func (HeroeModel) GetObjectList(query PaginationModel, heroeList *[]HeroeModel) error {
 	filter := bson.M{"coleccion": "Heroes"}
 	if *query.StatusFilter {
 		filter["estado"] = query.StatusFilter
 	}
-	return getObjectListRaw(filter, query, heroeList)
+	return getHeroeListRaw(filter, query, heroeList)
 }
 
 func (HeroeModel) GetObjectListByName(query PaginationModel, keyword string, heroeList *[]HeroeModel) error {
 	filter := bson.M{"nombre": bson.M{"$regex": keyword, "$options": "i"}, "estado": true, "coleccion": "Heroes"}
-	return getObjectListRaw(filter, query, heroeList)
+	return getHeroeListRaw(filter, query, heroeList)
 }
 
 func (h HeroeModel) PostObject() error {
@@ -95,7 +87,7 @@ func (h *HeroeModel) UpdateObject() error {
 }
 
 // [Funciones Raw]
-func getObjectListRaw(filter interface{}, query PaginationModel, heroeList *[]HeroeModel) error {
+func getHeroeListRaw(filter interface{}, query PaginationModel, heroeList *[]HeroeModel) error {
 	db := database.GetMongoClient()
 	col := db.Database(os.Getenv("MONGO_DB")).Collection("cartas")
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)

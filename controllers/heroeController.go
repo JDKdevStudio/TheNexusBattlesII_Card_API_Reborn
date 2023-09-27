@@ -3,37 +3,11 @@ package controllers
 import (
 	"TheNexusBattlesII_Card_API_Reborn/models"
 	"TheNexusBattlesII_Card_API_Reborn/utils"
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
-
-// HeroeGet godoc
-// @Router /heroes/{id} [get]
-// @Tags Heroes
-// @Summary trae un documento tipo Heroe
-// @Description este método devuelve un documento tipo Heroe por búsqueda de id
-// @Param id path string true "ID del heroe"
-// @Produce json
-// @Success 200 {object} models.HeroeModel "Documento tipo Heroe"
-// @Failure 400 {object} string "Id de búsqueda inválido"
-// @Failure 404 {object} string "Documento no existente en la base de datos"
-func GetHeroe(c echo.Context) error {
-	//[1. Validar el id]
-	id := c.Param("id")
-	id_bson, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message:": "Bad Request: Invalid id"})
-	}
-	//[2. Traer el documento]
-	var heroe models.HeroeModel
-	if err := heroe.GetObject(id_bson); err != nil {
-		return c.JSON(http.StatusNotFound, map[string]string{"message:": "404: Document not found"})
-	}
-	return c.JSON(http.StatusOK, heroe)
-}
 
 // HeroeListGet godoc
 // @Router /heroes/ [get]
@@ -137,7 +111,7 @@ func PostHeroe(c echo.Context) error {
 	if imagen, err := c.FormFile("imagen"); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Bad Request: Error uploading image"})
 	} else {
-		if imagenName, err = utils.UploadImageHandler(imagen, []string{".jpg", ".jpeg", ".png", ".gif"}); err != nil {
+		if imagenName, err = utils.UploadImageHandler(imagen, []string{".webp"}); err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Internal Server Error: Error processing image"})
 		}
 		heroe.Imagen = &imagenName
@@ -196,8 +170,7 @@ func PatchHeroe(c echo.Context) error {
 	if imagen, err := c.FormFile("imagen"); err != nil && imagen != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Bad Request: Error uploading image"})
 	} else if imagen != nil {
-		fmt.Println("entre aqui")
-		if imagenName, err = utils.UploadImageHandler(imagen, []string{".jpg", ".jpeg", ".png", ".gif"}); err != nil {
+		if imagenName, err = utils.UploadImageHandler(imagen, []string{".webp"}); err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Internal Server Error: Error processing image"})
 		}
 		heroe.Imagen = &imagenName

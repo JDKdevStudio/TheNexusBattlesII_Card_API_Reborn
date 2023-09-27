@@ -3,9 +3,10 @@ package models
 import "github.com/go-playground/validator/v10"
 
 type PaginationModel struct {
-	Size         int   `query:"size"         validate:"required,gt=0"`
-	Page         int   `query:"page"         validate:"required,gt=0"`
-	StatusFilter *bool `query:"statusFilter" validate:"required"`
+	Size         int    `query:"size"         validate:"required,gt=0"`
+	Page         int    `query:"page"         validate:"required,gt=0"`
+	Coleccion    string `                     validate:"required,alpha,oneof=Heroes Armas Armaduras Items Épicas"`
+	StatusFilter *bool  `query:"statusFilter" validate:"required"`
 }
 
 func (p PaginationModel) Validate() error {

@@ -14,6 +14,180 @@
     "host": "localhost",
     "basePath": "/api",
     "paths": {
+        "/cartas/getid/{id}": {
+            "get": {
+                "description": "este método devuelve un documento tipo Carta por búsqueda de id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cartas"
+                ],
+                "summary": "trae un documento tipo Carta",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID de la Carta",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Documento tipo Carta",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "Id de búsqueda inválido",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Documento no existente en la base de datos",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/consumible/": {
+            "get": {
+                "description": "este método devuelve una lista de documentos tipo Consumible",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Consumible"
+                ],
+                "summary": "trae una lista de documentos tipo Consumible",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tamaño de la paginación",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Página de los documentos",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Coleccion del documento",
+                        "name": "coleccion",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Si se activa el filtro, solo trae las cartas activas",
+                        "name": "statusFilter",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de documentos tipo Consumible",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ConsumibleModel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros de paginación inválidos",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno en el servidor",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/consumible/name/": {
+            "get": {
+                "description": "este método devuelve una lista de documentos tipo Consumible filtrado por nombre",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Consumible"
+                ],
+                "summary": "trae una lista de documentos tipo Consumible filtrado por nombre",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tamaño de la paginación",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Página de los documentos",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "palabra clave para filtrar",
+                        "name": "keyword",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Coleccion del documento",
+                        "name": "coleccion",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de documentos tipo Consumible",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ConsumibleModel"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros de paginación inválidos",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno en el servidor",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/heroes/": {
             "get": {
                 "description": "este método devuelve una lista de documentos tipo Heroe",
@@ -416,56 +590,103 @@
                     }
                 }
             }
-        },
-        "/heroes/{id}": {
-            "get": {
-                "description": "este método devuelve un documento tipo Heroe por búsqueda de id",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Heroes"
-                ],
-                "summary": "trae un documento tipo Heroe",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ID del heroe",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Documento tipo Heroe",
-                        "schema": {
-                            "$ref": "#/definitions/models.HeroeModel"
-                        }
-                    },
-                    "400": {
-                        "description": "Id de búsqueda inválido",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Documento no existente en la base de datos",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
+        "models.ConsumibleModel": {
+            "type": "object",
+            "required": [
+                "clase",
+                "coleccion",
+                "descripcion",
+                "descuento",
+                "efecto",
+                "efectoHeroe",
+                "estado",
+                "icono",
+                "imagen",
+                "nombre",
+                "precio",
+                "stock",
+                "tipo"
+            ],
+            "properties": {
+                "clase": {
+                    "type": "string",
+                    "enum": [
+                        "Guerrero",
+                        "Mago",
+                        "Pícaro"
+                    ]
+                },
+                "coleccion": {
+                    "type": "string",
+                    "enum": [
+                        "Heroes",
+                        "Armas",
+                        "Armaduras",
+                        "Items",
+                        "Épicas"
+                    ]
+                },
+                "descripcion": {
+                    "type": "string"
+                },
+                "descuento": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "efecto": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "efectoHeroe": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "estado": {
+                    "type": "boolean"
+                },
+                "icono": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "imagen": {
+                    "type": "string"
+                },
+                "nombre": {
+                    "type": "string"
+                },
+                "precio": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "stock": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "tipo": {
+                    "type": "string",
+                    "enum": [
+                        "Tanque",
+                        "Armas",
+                        "Fuego",
+                        "Hielo",
+                        "Veneno",
+                        "Machete"
+                    ]
+                }
+            }
+        },
         "models.HeroeModel": {
             "type": "object",
             "required": [
                 "ataqueBase",
                 "ataqueRnd",
                 "clase",
+                "coleccion",
                 "daño",
                 "defensa",
                 "descripcion",
@@ -477,7 +698,6 @@
                 "poder",
                 "precio",
                 "stock",
-                "tipo",
                 "tipo",
                 "vida"
             ],
@@ -494,6 +714,16 @@
                         "Guerrero",
                         "Mago",
                         "Pícaro"
+                    ]
+                },
+                "coleccion": {
+                    "type": "string",
+                    "enum": [
+                        "Heroes",
+                        "Armas",
+                        "Armaduras",
+                        "Items",
+                        "Épicas"
                     ]
                 },
                 "daño": {
@@ -538,11 +768,12 @@
                 "tipo": {
                     "type": "string",
                     "enum": [
-                        "Heroes",
+                        "Tanque",
                         "Armas",
-                        "Armaduras",
-                        "Items",
-                        "Épicas"
+                        "Fuego",
+                        "Hielo",
+                        "Veneno",
+                        "Machete"
                     ]
                 },
                 "vida": {
