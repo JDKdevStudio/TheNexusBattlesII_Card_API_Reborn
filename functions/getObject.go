@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func GetObjectById(item_id primitive.ObjectID, item map[string]interface{}) error {
+func GetObject(item_id primitive.ObjectID, item map[string]interface{}) error {
 	db := database.GetMongoClient()
 	col := db.Database(os.Getenv("MONGO_DB")).Collection("cartas")
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)

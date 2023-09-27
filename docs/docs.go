@@ -20,7 +20,141 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/cartas/getid/{id}": {
+        "/cartas/": {
+            "get": {
+                "description": "este método devuelve una lista de documentos tipo Carta",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cartas"
+                ],
+                "summary": "trae una lista de documentos tipo Carta",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tamaño de la paginación",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Página de los documentos",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Coleccion del documento",
+                        "name": "coleccion",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Si se activa el filtro, solo trae las cartas activas",
+                        "name": "statusFilter",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de documentos tipo Carta",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros de paginación inválidos",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno en el servidor",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/cartas/name/": {
+            "get": {
+                "description": "este método devuelve una lista de documentos tipo Carta filtrado por nombre",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cartas"
+                ],
+                "summary": "trae una lista de documentos tipo Carta filtrado por nombre",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Tamaño de la paginación",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Página de los documentos",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "palabra clave para filtrar",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Coleccion del documento",
+                        "name": "coleccion",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de documentos tipo Carta",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros de paginación inválidos",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno en el servidor",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/cartas/{id}": {
             "get": {
                 "description": "este método devuelve un documento tipo Carta por búsqueda de id",
                 "produces": [

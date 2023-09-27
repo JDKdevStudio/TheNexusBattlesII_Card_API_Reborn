@@ -158,7 +158,52 @@ info:
   title: 'The Nexus Battles II: Card API Service Reborn'
   version: "2.0"
 paths:
-  /cartas/getid/{id}:
+  /cartas/:
+    get:
+      description: este método devuelve una lista de documentos tipo Carta
+      parameters:
+      - description: Tamaño de la paginación
+        in: query
+        name: size
+        required: true
+        type: integer
+      - description: Página de los documentos
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Coleccion del documento
+        in: query
+        name: coleccion
+        required: true
+        type: string
+      - description: Si se activa el filtro, solo trae las cartas activas
+        in: query
+        name: statusFilter
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lista de documentos tipo Carta
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+        "400":
+          description: Parámetros de paginación inválidos
+          schema:
+            type: string
+        "500":
+          description: Error interno en el servidor
+          schema:
+            type: string
+      summary: trae una lista de documentos tipo Carta
+      tags:
+      - Cartas
+  /cartas/{id}:
     get:
       description: este método devuelve un documento tipo Carta por búsqueda de id
       parameters:
@@ -183,6 +228,53 @@ paths:
           schema:
             type: string
       summary: trae un documento tipo Carta
+      tags:
+      - Cartas
+  /cartas/name/:
+    get:
+      consumes:
+      - application/json
+      description: este método devuelve una lista de documentos tipo Carta filtrado
+        por nombre
+      parameters:
+      - description: Tamaño de la paginación
+        in: query
+        name: size
+        required: true
+        type: integer
+      - description: Página de los documentos
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: palabra clave para filtrar
+        in: query
+        name: keyword
+        type: string
+      - description: Coleccion del documento
+        in: query
+        name: coleccion
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lista de documentos tipo Carta
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+        "400":
+          description: Parámetros de paginación inválidos
+          schema:
+            type: string
+        "500":
+          description: Error interno en el servidor
+          schema:
+            type: string
+      summary: trae una lista de documentos tipo Carta filtrado por nombre
       tags:
       - Cartas
   /consumible/:

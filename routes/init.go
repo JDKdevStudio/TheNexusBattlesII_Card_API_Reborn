@@ -15,7 +15,8 @@ func Init(server *echo.Echo) {
 	server.GET("/docs/*", echoSwagger.WrapHandler)
 	server.Static("/assets/", "assets")
 	//Endpoints de uso general
-	server.GET("/api/cartas/getid/:id", controllers.GetObjectById)
+	server.GET("/api/cartas/:id", controllers.GetObject)
+	server.GET("/api/cartas/", controllers.GetObjectList)
 	//Endpoints para heroe
 	server.GET("/api/heroes/", controllers.GetHeroeList)
 	server.GET("/api/heroes/name/", controllers.GetHeroeListByName)
