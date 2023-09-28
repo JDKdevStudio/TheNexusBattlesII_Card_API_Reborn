@@ -7,6 +7,12 @@ import (
 )
 
 func GetObjectList(query models.PaginationModel, list *[]map[string]interface{}) error {
-	filter := bson.M{"nombre": bson.M{"$regex": query.Keyword, "$options": "i"}, "estado": true, "coleccion": query.Coleccion}
+	filter := bson.M{"nombre": bson.M{"$regex": query.Keyword, "$options": "i"}}
+	if query.Coleccion != "All" {
+		filter["coleccion"] = query.Coleccion
+	}
+	if *query.OnlyActives {
+		filter["estado"] = query.OnlyActives
+	}
 	return rawGetObjectList(filter, query, list)
 }

@@ -9,66 +9,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// HeroeListGet godoc
-// @Router /heroes/ [get]
-// @Tags Heroes
-// @Summary trae una lista de documentos tipo Heroe
-// @Description este método devuelve una lista de documentos tipo Heroe
-// @Param size query int true "Tamaño de la paginación"
-// @Param page query int true "Página de los documentos"
-// @Param statusFilter query bool true "Si se activa el filtro, solo trae las cartas activas"
-// @Produce json
-// @Success 200 {object} []models.HeroeModel "Lista de documentos tipo Heroe"
-// @Failure 400 {object} string "Parámetros de paginación inválidos"
-// @Failure 500 {object} string "Error interno en el servidor"
-func GetHeroeList(c echo.Context) error {
-	//[1. Validar paginación]
-	var pagination models.PaginationModel
-	if err := c.Bind(&pagination); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message:": "Bad Request: Invalid query parameters"})
-	}
-	if err := pagination.Validate(); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message:": "Bad Request: Invalid query parameters"})
-	}
-	//[2. Traer los documentos]
-	var heroeList []models.HeroeModel
-	if err := models.HeroeModel.GetObjectList(models.HeroeModel{}, pagination, &heroeList); err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message:": "Internal Server Error: Documents not found"})
-	}
-	return c.JSON(http.StatusOK, heroeList)
-}
-
-// HeroeListByNameGet godoc
-// @Router /heroes/name/ [get]
-// @Tags Heroes
-// @Summary trae una lista de documentos tipo Heroe filtrado por nombre
-// @Description este método devuelve una lista de documentos tipo Heroe filtrado por nombre
-// @Param size query int true "Tamaño de la paginación"
-// @Param page query int true "Página de los documentos"
-// @Param keyword query string true "palabra clave para filtrar"
-// @Accept json
-// @Produce json
-// @Success 200 {object} []models.HeroeModel "Lista de documentos tipo Heroe"
-// @Failure 400 {object} string "Parámetros de paginación inválidos"
-// @Failure 500 {object} string "Error interno en el servidor"
-func GetHeroeListByName(c echo.Context) error {
-	//[2. Validar paginación y keyword]
-	var pagination models.PaginationModel
-	if err := c.Bind(&pagination); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message:": "Bad Request: Invalid parameters"})
-	}
-	keyword := c.QueryParam("keyword")
-	if err := pagination.Validate(); err != nil && keyword == "" {
-		return c.JSON(http.StatusBadRequest, map[string]string{"message:": "Bad Request: Invalid parameters"})
-	}
-	//[2. Traer los documentos]
-	var heroeList []models.HeroeModel
-	if err := models.HeroeModel.GetObjectListByName(models.HeroeModel{}, pagination, keyword, &heroeList); err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"message:": "Internal Server Error: Documents not found"})
-	}
-	return c.JSON(http.StatusOK, heroeList)
-}
-
 // HeroePost godoc
 // @Router /heroes/ [post]
 // @Tags Heroes

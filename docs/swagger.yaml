@@ -1,153 +1,8 @@
 basePath: /api
-definitions:
-  models.ConsumibleModel:
-    properties:
-      clase:
-        enum:
-        - Guerrero
-        - Mago
-        - Pícaro
-        type: string
-      coleccion:
-        enum:
-        - Heroes
-        - Armas
-        - Armaduras
-        - Items
-        - Épicas
-        type: string
-      descripcion:
-        type: string
-      descuento:
-        minimum: 0
-        type: integer
-      efecto:
-        additionalProperties: true
-        type: object
-      efectoHeroe:
-        additionalProperties: true
-        type: object
-      estado:
-        type: boolean
-      icono:
-        type: string
-      id:
-        type: string
-      imagen:
-        type: string
-      nombre:
-        type: string
-      precio:
-        minimum: 0
-        type: integer
-      stock:
-        minimum: 0
-        type: integer
-      tipo:
-        enum:
-        - Tanque
-        - Armas
-        - Fuego
-        - Hielo
-        - Veneno
-        - Machete
-        type: string
-    required:
-    - clase
-    - coleccion
-    - descripcion
-    - descuento
-    - efecto
-    - efectoHeroe
-    - estado
-    - icono
-    - imagen
-    - nombre
-    - precio
-    - stock
-    - tipo
-    type: object
-  models.HeroeModel:
-    properties:
-      ataqueBase:
-        type: integer
-      ataqueRnd:
-        type: integer
-      clase:
-        enum:
-        - Guerrero
-        - Mago
-        - Pícaro
-        type: string
-      coleccion:
-        enum:
-        - Heroes
-        - Armas
-        - Armaduras
-        - Items
-        - Épicas
-        type: string
-      daño:
-        type: integer
-      defensa:
-        type: integer
-      descripcion:
-        type: string
-      descuento:
-        minimum: 0
-        type: integer
-      estado:
-        type: boolean
-      icono:
-        type: string
-      id:
-        type: string
-      imagen:
-        type: string
-      nombre:
-        type: string
-      poder:
-        type: integer
-      precio:
-        minimum: 0
-        type: integer
-      stock:
-        minimum: 0
-        type: integer
-      tipo:
-        enum:
-        - Tanque
-        - Armas
-        - Fuego
-        - Hielo
-        - Veneno
-        - Machete
-        type: string
-      vida:
-        type: integer
-    required:
-    - ataqueBase
-    - ataqueRnd
-    - clase
-    - coleccion
-    - daño
-    - defensa
-    - descripcion
-    - descuento
-    - estado
-    - icono
-    - imagen
-    - nombre
-    - poder
-    - precio
-    - stock
-    - tipo
-    - vida
-    type: object
 externalDocs:
   description: Repository
   url: https://github.com/JDKdevStudio/TheNexusBattlesII_Card_API_Reborn
-host: localhost
+host: cards.thenexusbattles2.cloud
 info:
   contact: {}
   description: Servicio API para acceder a las cartas del negocio
@@ -160,6 +15,8 @@ info:
 paths:
   /cartas/:
     get:
+      consumes:
+      - application/json
       description: este método devuelve una lista de documentos tipo Carta
       parameters:
       - description: Tamaño de la paginación
@@ -172,14 +29,18 @@ paths:
         name: page
         required: true
         type: integer
+      - description: palabra clave para filtrar por nombre
+        in: query
+        name: keyword
+        type: string
       - description: Coleccion del documento
         in: query
         name: coleccion
         required: true
         type: string
-      - description: Si se activa el filtro, solo trae las cartas activas
+      - description: Si está activo trae SOLO los documentos activos
         in: query
-        name: statusFilter
+        name: onlyActives
         required: true
         type: boolean
       produces:
@@ -230,183 +91,7 @@ paths:
       summary: trae un documento tipo Carta
       tags:
       - Cartas
-  /cartas/name/:
-    get:
-      consumes:
-      - application/json
-      description: este método devuelve una lista de documentos tipo Carta filtrado
-        por nombre
-      parameters:
-      - description: Tamaño de la paginación
-        in: query
-        name: size
-        required: true
-        type: integer
-      - description: Página de los documentos
-        in: query
-        name: page
-        required: true
-        type: integer
-      - description: palabra clave para filtrar
-        in: query
-        name: keyword
-        type: string
-      - description: Coleccion del documento
-        in: query
-        name: coleccion
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Lista de documentos tipo Carta
-          schema:
-            items:
-              additionalProperties: true
-              type: object
-            type: array
-        "400":
-          description: Parámetros de paginación inválidos
-          schema:
-            type: string
-        "500":
-          description: Error interno en el servidor
-          schema:
-            type: string
-      summary: trae una lista de documentos tipo Carta filtrado por nombre
-      tags:
-      - Cartas
-  /consumible/:
-    get:
-      description: este método devuelve una lista de documentos tipo Consumible
-      parameters:
-      - description: Tamaño de la paginación
-        in: query
-        name: size
-        required: true
-        type: integer
-      - description: Página de los documentos
-        in: query
-        name: page
-        required: true
-        type: integer
-      - description: Coleccion del documento
-        in: query
-        name: coleccion
-        required: true
-        type: string
-      - description: Si se activa el filtro, solo trae las cartas activas
-        in: query
-        name: statusFilter
-        required: true
-        type: boolean
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Lista de documentos tipo Consumible
-          schema:
-            items:
-              $ref: '#/definitions/models.ConsumibleModel'
-            type: array
-        "400":
-          description: Parámetros de paginación inválidos
-          schema:
-            type: string
-        "500":
-          description: Error interno en el servidor
-          schema:
-            type: string
-      summary: trae una lista de documentos tipo Consumible
-      tags:
-      - Consumible
-  /consumible/name/:
-    get:
-      consumes:
-      - application/json
-      description: este método devuelve una lista de documentos tipo Consumible filtrado
-        por nombre
-      parameters:
-      - description: Tamaño de la paginación
-        in: query
-        name: size
-        required: true
-        type: integer
-      - description: Página de los documentos
-        in: query
-        name: page
-        required: true
-        type: integer
-      - description: palabra clave para filtrar
-        in: query
-        name: keyword
-        required: true
-        type: string
-      - description: Coleccion del documento
-        in: query
-        name: coleccion
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Lista de documentos tipo Consumible
-          schema:
-            items:
-              $ref: '#/definitions/models.ConsumibleModel'
-            type: array
-        "400":
-          description: Parámetros de paginación inválidos
-          schema:
-            type: string
-        "500":
-          description: Error interno en el servidor
-          schema:
-            type: string
-      summary: trae una lista de documentos tipo Consumible filtrado por nombre
-      tags:
-      - Consumible
   /heroes/:
-    get:
-      description: este método devuelve una lista de documentos tipo Heroe
-      parameters:
-      - description: Tamaño de la paginación
-        in: query
-        name: size
-        required: true
-        type: integer
-      - description: Página de los documentos
-        in: query
-        name: page
-        required: true
-        type: integer
-      - description: Si se activa el filtro, solo trae las cartas activas
-        in: query
-        name: statusFilter
-        required: true
-        type: boolean
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Lista de documentos tipo Heroe
-          schema:
-            items:
-              $ref: '#/definitions/models.HeroeModel'
-            type: array
-        "400":
-          description: Parámetros de paginación inválidos
-          schema:
-            type: string
-        "500":
-          description: Error interno en el servidor
-          schema:
-            type: string
-      summary: trae una lista de documentos tipo Heroe
-      tags:
-      - Heroes
     patch:
       consumes:
       - multipart/form-data
@@ -600,48 +285,6 @@ paths:
               type: string
             type: object
       summary: crea un documento tipo Heroe
-      tags:
-      - Heroes
-  /heroes/name/:
-    get:
-      consumes:
-      - application/json
-      description: este método devuelve una lista de documentos tipo Heroe filtrado
-        por nombre
-      parameters:
-      - description: Tamaño de la paginación
-        in: query
-        name: size
-        required: true
-        type: integer
-      - description: Página de los documentos
-        in: query
-        name: page
-        required: true
-        type: integer
-      - description: palabra clave para filtrar
-        in: query
-        name: keyword
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Lista de documentos tipo Heroe
-          schema:
-            items:
-              $ref: '#/definitions/models.HeroeModel'
-            type: array
-        "400":
-          description: Parámetros de paginación inválidos
-          schema:
-            type: string
-        "500":
-          description: Error interno en el servidor
-          schema:
-            type: string
-      summary: trae una lista de documentos tipo Heroe filtrado por nombre
       tags:
       - Heroes
 swagger: "2.0"

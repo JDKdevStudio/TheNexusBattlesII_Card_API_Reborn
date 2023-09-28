@@ -43,6 +43,7 @@ func GetObject(c echo.Context) error {
 // @Param page query int true "Página de los documentos"
 // @Param keyword query string false "palabra clave para filtrar por nombre"
 // @Param coleccion query string true "Coleccion del documento"
+// @Param onlyActives query bool true "Si está activo trae SOLO los documentos activos"
 // @Accept json
 // @Produce json
 // @Success 200 {object} []map[string]interface{} "Lista de documentos tipo Carta"
@@ -51,7 +52,6 @@ func GetObject(c echo.Context) error {
 func GetObjectList(c echo.Context) error {
 	//[2. Validar paginación]
 	var pagination models.PaginationModel
-	pagination.StatusFilter = &[]bool{false}[0]
 	if err := c.Bind(&pagination); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message:": "Bad Request: Invalid parameters"})
 	}
