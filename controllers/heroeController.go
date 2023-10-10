@@ -3,6 +3,7 @@ package controllers
 import (
 	"TheNexusBattlesII_Card_API_Reborn/models"
 	"TheNexusBattlesII_Card_API_Reborn/utils"
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -29,6 +30,7 @@ import (
 // @Param precio formData int true "[Ecommerce] Precio de la carta"
 // @Param descuento formData int true "[Ecommerce] Descuento de la carta"
 // @Param stock formData int true "[Ecommerce] Stock de la carta"
+// @Param estado formData bool true "Activar o desactivar la carta"
 // @Accept mpfd
 // @Produce json
 // @Success 200 {object} map[string]string "Documento creado exitosamente"
@@ -37,13 +39,15 @@ import (
 func PostHeroe(c echo.Context) error {
 	//[1. Validar datos del objeto - asignar valores]
 	var heroe models.HeroeModel
-	heroe.Imagen = &[]string{"tempImageName"}[0]
-	heroe.Coleccion = &[]string{"Heroes"}[0]
-	heroe.Estado = &[]bool{true}[0]
+	heroe_imagen := "tempImageName"
+	heroe.Imagen = &heroe_imagen
+	heroe_coleccion := "Heroes"
+	heroe.Coleccion = &heroe_coleccion
 	if err := c.Bind(&heroe); err != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message:": "Bad Request: Invalid parameters"})
 	}
 	if err := heroe.Validate(false); err != nil {
+		fmt.Println(err)
 		return c.JSON(http.StatusBadRequest, map[string]string{"message:": "Bad Request: Invalid parameters"})
 	}
 	//[2. Validar carga de imagen]
@@ -56,14 +60,14 @@ func PostHeroe(c echo.Context) error {
 		}
 		heroe.Imagen = &imagenName
 	}
-	//[4. Subir objeto a la base de datos]
+	//[3. Subir objeto a la base de datos]
 	if err := heroe.PostObject(); err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Internal Server Error: Error uploading document"})
 	}
 	return c.JSON(http.StatusOK, map[string]string{"message": "Document created successfully"})
 }
 
-// HeroePost godoc
+// HeroePatch godoc
 // @Router /heroes/ [patch]
 // @Tags Heroes
 // @Summary actualiza un documento tipo Heroe
@@ -104,12 +108,11 @@ func PatchHeroe(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message:": "Bad Request: Invalid parameters"})
 	}
 	heroe.Id = id_bson
-	heroe.Coleccion = &[]string{"Heroes"}[0]
 	//[3. Validar carga de imagen (si la hay)]
-	var imagenName string
 	if imagen, err := c.FormFile("imagen"); err != nil && imagen != nil {
 		return c.JSON(http.StatusBadRequest, map[string]string{"message": "Bad Request: Error uploading image"})
 	} else if imagen != nil {
+		var imagenName string
 		if imagenName, err = utils.UploadImageHandler(imagen, []string{".webp"}); err != nil {
 			return c.JSON(http.StatusInternalServerError, map[string]string{"message": "Internal Server Error: Error processing image"})
 		}

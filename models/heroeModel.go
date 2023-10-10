@@ -16,7 +16,7 @@ type HeroeModel struct {
 	Id          primitive.ObjectID `bson:"_id,omitempty"`
 	Imagen      *string            `bson:"imagen,omitempty"                          validate:"required"`
 	Icono       *string            `bson:"icono,omitempty"        form:"icono"       validate:"required,url"`
-	Nombre      *string            `bson:"nombre,omitempty"       form:"nombre"      validate:"required,regexp=^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ ]*$"`
+	Nombre      *string            `bson:"nombre,omitempty"       form:"nombre"      validate:"required"`
 	Clase       *string            `bson:"clase,omitempty"        form:"clase"       validate:"required,alpha,oneof=Guerrero Mago Pícaro"`
 	Tipo        *string            `bson:"tipo,omitempty"         form:"tipo"        validate:"required,alpha,oneof=Tanque Armas Fuego Hielo Veneno Machete"`
 	Coleccion   *string            `bson:"coleccion,omitempty"                       validate:"required,alpha,oneof=Heroes Armas Armaduras Items Epicas"`
@@ -26,16 +26,16 @@ type HeroeModel struct {
 	AtaqueBase  *int               `bson:"ataqueBase,omitempty"   form:"ataqueBase"  validate:"required,gt=0"`
 	AtaqueRnd   *int               `bson:"ataqueRnd,omitempty"    form:"ataqueRnd"   validate:"required,gt=0"`
 	Dano        *int               `bson:"daño,omitempty"         form:"daño"        validate:"required,gt=0"`
-	Descripcion *string            `bson:"descripcion,omitempty"  form:"descripcion" validate:"required,regexp=^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ ]*$"`
+	Descripcion *string            `bson:"descripcion,omitempty"  form:"descripcion" validate:"required"`
 	Precio      *int               `bson:"precio,omitempty"       form:"precio"      validate:"required,gte=0"`
 	Descuento   *int               `bson:"descuento,omitempty"    form:"descuento"   validate:"required,gte=0"`
 	Stock       *int               `bson:"stock,omitempty"        form:"stock"       validate:"required,gte=0"`
-	Estado      *bool              `bson:"estado,omitempty"       form:"estado"      validate:"required"`
+	Estado      *bool              `bson:"estado,omitempty"       form:"estado"      validate:"boolrequired"`
 }
 
 func (h *HeroeModel) Validate(validateNotNulls bool) error {
 	validate := validator.New()
-	validate.RegisterValidation("regexp", utils.RegexValidator())
+	validate.RegisterValidation("boolrequired", utils.BoolValidator())
 	if validateNotNulls {
 		return utils.NullCheckValidator(h, validate)
 	}

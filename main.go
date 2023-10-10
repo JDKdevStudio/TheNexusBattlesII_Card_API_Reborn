@@ -16,7 +16,7 @@ import (
 // @license.name  MIT
 // @license.url   https://opensource.org/license/mit/
 
-// @host      cards.thenexusbattles2.cloud
+// @host      localhost
 // @BasePath  /api
 
 // @externalDocs.description  Repository

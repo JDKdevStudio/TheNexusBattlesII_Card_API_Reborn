@@ -136,6 +136,253 @@ const docTemplate = `{
                 }
             }
         },
+        "/consumible/": {
+            "post": {
+                "description": "este método recibe los parámetros de tipo Consumible y crea la carta",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Consumible"
+                ],
+                "summary": "crea un documento tipo Consumible",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Imagen de la carta",
+                        "name": "imagen",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Icono de la carta",
+                        "name": "icono",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Nombre de la carta",
+                        "name": "nombre",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Clase de la carta",
+                        "name": "clase",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Tipo de la carta",
+                        "name": "tipo",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Colección de la carta",
+                        "name": "coleccion",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Efecto de la carta",
+                        "name": "efecto",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Efecto tipo héroe de la carta",
+                        "name": "efectoHeroe",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Descripción de la carta",
+                        "name": "descripcion",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "[Ecommerce] Precio de la carta",
+                        "name": "precio",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "[Ecommerce] Descuento de la carta",
+                        "name": "descuento",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "[Ecommerce] Stock de la carta",
+                        "name": "stock",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Activar o desactivar la carta",
+                        "name": "estado",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Documento creado exitosamente",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros de paginación inválidos",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno en el servidor",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "este método recibe los parámetros de tipo Consumible y actualiza la carta",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Consumible"
+                ],
+                "summary": "actualiza un documento tipo Consumible",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id de la carta",
+                        "name": "id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Imagen de la carta",
+                        "name": "imagen",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Icono de la carta",
+                        "name": "icono",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Nombre de la carta",
+                        "name": "nombre",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Efecto de la carta",
+                        "name": "efecto",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Efecto tipo héroe de la carta",
+                        "name": "efectoHeroe",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Descripción de la carta",
+                        "name": "descripcion",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "[Ecommerce] Precio de la carta",
+                        "name": "precio",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "[Ecommerce] Descuento de la carta",
+                        "name": "descuento",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "[Ecommerce] Stock de la carta",
+                        "name": "stock",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Activar o desactivar la carta",
+                        "name": "estado",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Documento creado exitosamente",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros de paginación inválidos",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno en el servidor",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/heroes/": {
             "post": {
                 "description": "este método recibe los parámetros de tipo Heroe y crea la carta",
@@ -252,6 +499,13 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "[Ecommerce] Stock de la carta",
                         "name": "stock",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Activar o desactivar la carta",
+                        "name": "estado",
                         "in": "formData",
                         "required": true
                     }
@@ -432,7 +686,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "2.0",
-	Host:             "cards.thenexusbattles2.cloud",
+	Host:             "localhost",
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "The Nexus Battles II: Card API Service Reborn",

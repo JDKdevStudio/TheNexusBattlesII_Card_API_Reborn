@@ -22,11 +22,11 @@ func UploadImageHandler(file *multipart.FileHeader, allowedExtensions []string) 
 	}
 
 	if !isAllowedExtension {
-		return "", fmt.Errorf("La extensión del archivo no es válida")
+		return "", fmt.Errorf("la extensión del archivo no es válida")
 	}
 
 	// Carpeta de destino donde se almacenará la imagen
-	destinationFolder := "assets"
+	destinationFolder := os.Getenv("ASSETSFOLDER")
 	// Nombre de archivo deseado
 	destinationFilename := GenerateUniqueName() + ext
 	// Ruta completa del archivo de destino

@@ -7,7 +7,7 @@ import (
 
 func DeleteImageHandler(filename *string) error {
 	// Carpeta donde se encuentra la imagen
-	imageFolder := "assets" // Reemplaza con la ruta correcta
+	imageFolder := os.Getenv("ASSETSFOLDER") // Reemplaza con la ruta correcta
 
 	// Ruta completa de la imagen a borrar
 	imagePath := filepath.Join(imageFolder, *filename)
